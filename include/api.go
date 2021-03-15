@@ -1,13 +1,16 @@
 package include
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"os"
+)
 
 func ApiProcessing() {
 
 	r := gin.Default()
 
 	r.POST("/files", UploadFiles)
-
+	r.GET("/logo/:id", GETLogoProcessing)
 	r.GET("/scripts", GetBaseScripts)
 
 	r.MaxMultipartMemory = 8 << 20
@@ -30,5 +33,5 @@ func ApiProcessing() {
 
 	r.GET("/schedule", GetSchedule)
 
-	r.Run(":49999")
+	r.Run(":" + os.Getenv("PORT"))
 }

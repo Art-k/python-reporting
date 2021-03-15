@@ -1,13 +1,18 @@
 package main
 
 import (
-	inc "./include"
 	"github.com/go-co-op/gocron"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
 	"time"
 )
+
+import (
+	inc "./include"
+)
+
+// TODO Add logo to email. Add logo processing, we need to know if email opened.
 
 func main() {
 

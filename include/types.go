@@ -133,3 +133,10 @@ type DBReport struct {
 	FileName  string
 	OpenCount int
 }
+
+type DBOutgoingMailHistory struct {
+	Model
+	DBOutgoingMailsID string `gorm:"index"`
+	RecType           string
+	HistoryMessage    string
+}

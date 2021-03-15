@@ -3,11 +3,32 @@ package include
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"net/http"
 	"strconv"
 )
 
 func createHash() string {
 	return uuid.New().String()
+}
+
+func GETLogoProcessing(cnt *gin.Context) {
+
+	id := cnt.Param("id")
+
+	var msg DBOutgoingMails
+	db.Where("id = ?", id).Last(&msg)
+	if msg.ID != "" {
+
+		var msgHistory DBOutgoingMailHistory
+		msgHistory.DBOutgoingMailsID = msg.ID
+		msgHistory.RecType = "opened"
+		msgHistory.HistoryMessage = cnt.Request.RemoteAddr
+		db.Create(&msgHistory)
+
+	}
+
+	http.ServeFile(cnt.Writer, cnt.Request, "./assets/icon.png")
+
 }
 
 func setPaginationParameters(cnt *gin.Context) (page, perPage int) {
