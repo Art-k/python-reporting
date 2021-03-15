@@ -38,18 +38,22 @@ func setPaginationParameters(cnt *gin.Context) (page, perPage int) {
 	pageStr := cnt.Query("page")
 	perPageStr := cnt.Query("per-page")
 
-	if pageStr == "" {
+	if pageStr != "" {
 		page, err = strconv.Atoi(pageStr)
 		if err != nil {
 			page = 1
 		}
+	} else {
+		page = 1
 	}
 
-	if perPageStr == "" {
-		perPage, err = strconv.Atoi(pageStr)
+	if perPageStr != "" {
+		perPage, err = strconv.Atoi(perPageStr)
 		if err != nil {
 			perPage = 15
 		}
+	} else {
+		perPage = 15
 	}
 
 	return page, perPage

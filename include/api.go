@@ -31,6 +31,7 @@ func ApiProcessing() {
 	//r.LoadHTMLGlob("results/*.html")
 	r.GET("/report/:report_id", GetReport)
 
+	r.GET("/jobs", GetJobs)
 	r.GET("/schedule", GetSchedule)
 
 	r.Run(":" + os.Getenv("PORT"))

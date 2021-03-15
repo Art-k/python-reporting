@@ -143,6 +143,7 @@ func GetBaseScripts(cnt *gin.Context) {
 	DB := db
 
 	DB.Preload(clause.Associations).
+		Order("created_at desc").
 		Find(&baseScripts).
 		Limit(perPage).
 		Offset(page - 1*perPage)

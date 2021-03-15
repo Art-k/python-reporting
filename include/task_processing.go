@@ -16,6 +16,7 @@ func GetTask(cnt *gin.Context) {
 	format := cnt.Query("format")
 
 	db.Preload(clause.Associations).
+		Order("created_at desc").
 		Find(&tasks).
 		Limit(perPage).
 		Offset(page - 1*perPage)

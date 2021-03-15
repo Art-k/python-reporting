@@ -186,6 +186,30 @@ func GetSchedule(cnt *gin.Context) {
 
 }
 
+func GetJobs(cnt *gin.Context) {
+
+	var jobs []DBJob
+
+	page, perPage := setPaginationParameters(cnt)
+
+	format := cnt.Query("format")
+
+	DB := db
+
+	DB.Preload(clause.Associations).
+		Order("created_at desc").
+		Find(&jobs).
+		Limit(perPage).
+		Offset(page - 1*perPage)
+
+	switch format {
+
+	default:
+		cnt.JSON(http.StatusOK, jobs)
+	}
+
+}
+
 func GetReport(cnt *gin.Context) {
 
 	reportId := cnt.Param("report_id")
