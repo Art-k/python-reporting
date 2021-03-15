@@ -9,7 +9,7 @@ import (
 
 func initLog(f *os.File) {
 
-	Log := logrus.New()
+	Log = logrus.New()
 
 	w := io.MultiWriter(os.Stdout, f)
 
@@ -20,5 +20,6 @@ func initLog(f *os.File) {
 	})
 
 	Log.SetLevel(logrus.TraceLevel)
+	Log.Trace("Application Started")
 
 }

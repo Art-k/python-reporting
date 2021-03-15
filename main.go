@@ -2,9 +2,11 @@ package main
 
 import (
 	inc "./include"
+	"github.com/go-co-op/gocron"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
+	"time"
 )
 
 func main() {
@@ -21,5 +23,11 @@ func main() {
 	}
 
 	inc.InitApplication(f)
+	inc.Sch = gocron.NewScheduler(time.UTC)
+	go inc.ApplicationStartAllTasks()
+
+	inc.OpenGmailCredentials(os.Getenv("SENDER_EMAIL"))
+	inc.OAuthGmailService()
+
 	inc.ApiProcessing()
 }
