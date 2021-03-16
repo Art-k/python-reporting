@@ -177,7 +177,7 @@ func FinishingTask(cnt *gin.Context) {
 		if !job.TestRun {
 			_, msgId, _ = SendEmailOAUTH2(recipient.Email, task.Subject, msg)
 		} else {
-			_, msgId, _ = SendEmailOAUTH2("mcc.autotest@gmail", task.Subject+" ("+recipient.Email+")", msg)
+			_, msgId, _ = SendEmailOAUTH2("mcc.autotest@gmail.com", task.Subject+" ("+recipient.Email+")", msg)
 		}
 
 		var outMsg DBOutgoingMails
