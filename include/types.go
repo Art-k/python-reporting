@@ -74,7 +74,6 @@ type DBTask struct {
 	DBBaseScriptID string
 	POSTTask
 	POSTSchedule
-
 	TaskParameters []DBTaskParameter
 	Jobs           []DBJob
 	Recipients     []DBRecipient
@@ -128,6 +127,7 @@ type DBJob struct {
 	Error          string
 	Reports        []DBReport
 	DurationMs     int
+	TestRun        bool
 }
 
 type DBReportDownloadHistory struct {

@@ -26,7 +26,6 @@ func RunScheduler(task *DBTask) {
 	switch task.RepeatInterval {
 	case "hour":
 		jb, err = Sch.Every(task.RepeatEvery).Hour().StartAt(*task.FirstRun).Do(StartJob, task, "timer")
-		Log.Trace(jb.NextRun())
 	case "minutes":
 		jb, err = Sch.Every(task.RepeatEvery).Minute().StartAt(*task.FirstRun).Do(StartJob, task, "timer")
 	case "minute":

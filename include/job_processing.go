@@ -35,6 +35,11 @@ func EnableTask(cnt *gin.Context) {
 func RunTask(cnt *gin.Context) {
 
 	taskId := cnt.Param("task_id")
+	test := cnt.Query("test")
+	var testRun bool
+	if test != "" {
+		testRun = true
+	}
 
 	var task DBTask
 	err := db.Preload(clause.Associations).Where("id =?", taskId).Find(&task).Error
@@ -43,13 +48,13 @@ func RunTask(cnt *gin.Context) {
 		return
 	}
 
-	job := StartJob(&task, "api")
+	job := StartJob(&task, "api", testRun)
 
 	cnt.JSON(http.StatusCreated, job)
 
 }
 
-func StartJob(task *DBTask, source string) DBJob {
+func StartJob(task *DBTask, source string, testRun bool) DBJob {
 
 	Log.Trace("Start Job '", source, "'")
 
@@ -68,6 +73,7 @@ func StartJob(task *DBTask, source string) DBJob {
 		CommandString:  "",
 		CommandOutput:  "",
 		Error:          "",
+		TestRun:        testRun,
 	}
 	db.Create(&job)
 
@@ -154,7 +160,13 @@ func FinishingTask(cnt *gin.Context) {
 		msg := strings.Replace(task.Message, "[[RECIPIENT_NAME]]", recipient.Name, 1)
 		msg = strings.Replace(msg, "[[REPORTS]]", fileBlock, 1)
 
-		_, msgId, _ := SendEmailOAUTH2(recipient.Email, task.Subject, msg)
+		var msgId string
+
+		if !job.TestRun {
+			_, msgId, _ = SendEmailOAUTH2(recipient.Email, task.Subject, msg)
+		} else {
+			_, msgId, _ = SendEmailOAUTH2("mcc.autotest@gmail", task.Subject+" ("+recipient.Email+")", msg)
+		}
 
 		var outMsg DBOutgoingMails
 		db.Where("id = ?", msgId).Find(&outMsg)
@@ -246,6 +258,23 @@ func GetReportByRecipient(cnt *gin.Context) {
 	report.OpenCount += 1
 	db.Save(report)
 }
+
+func GetReportInfo(cnt *gin.Context) {
+
+	reportId := cnt.Param("report_id")
+	var report DBReport
+	err := db.Where("id = ?", reportId).Find(&report).Error
+	if err != nil {
+		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+	if report.ID != "" {
+		cnt.JSON(http.StatusOK, report)
+	} else {
+		cnt.JSON(http.StatusNotFound, nil)
+	}
+}
+
 func GetReport(cnt *gin.Context) {
 
 	reportId := cnt.Param("report_id")

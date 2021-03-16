@@ -24,14 +24,16 @@ func ApiProcessing() {
 	r.POST("/task/:task_id/parameters", PostTaskParameter)
 	r.POST("/task/:task_id/recipients", PostTaskRecipients)
 	r.POST("/task/:task_id/schedule", PostTaskSchedule)
+
 	r.POST("/task/:task_id/run", RunTask)
 	r.POST("/task/:task_id/enable", EnableTask)
 
 	r.POST("/job_done/:job_id", FinishingTask)
 
 	//r.LoadHTMLGlob("results/*.html")
-	r.GET("/report/:report_id", GetReport)
-	r.GET("/report/:report_id/*recipient_id", GetReportByRecipient)
+	r.GET("/report/:report_id", GetReport)                          //return file, open counter increased
+	r.GET("/report-info/:report_id", GetReportInfo)                 //return json
+	r.GET("/report/:report_id/*recipient_id", GetReportByRecipient) // return file, open counter increased, download statistic is saved for recipient <> report
 
 	r.GET("/jobs", GetJobs)
 	r.GET("/schedule", GetSchedule)
