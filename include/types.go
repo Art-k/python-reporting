@@ -127,6 +127,12 @@ type DBJob struct {
 	DurationMs     int
 }
 
+type DBReportDownloadHistory struct {
+	Model
+	DBReportID    string
+	DBRecipientID string
+}
+
 type DBReport struct {
 	Model
 	DBJobID   string

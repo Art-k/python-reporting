@@ -30,6 +30,7 @@ func ApiProcessing() {
 
 	//r.LoadHTMLGlob("results/*.html")
 	r.GET("/report/:report_id", GetReport)
+	r.GET("/report/:report_id/*recipient_id", GetReportByRecipient)
 
 	r.GET("/jobs", GetJobs)
 	r.GET("/schedule", GetSchedule)

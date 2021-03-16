@@ -144,10 +144,10 @@ func FinishingTask(cnt *gin.Context) {
 
 	for _, recipient := range recipients {
 
-		fileBlock := "Here is a list of reports <ul>"
+		fileBlock := "<p>Here is a list of reports :<ul>"
 		for _, file := range dbFiles {
 			fExt := filepath.Ext(file.FileName)
-			fileBlock += "<li><a href='" + os.Getenv("DOMAIN") + "/report/" + file.ID + "'>report" + fExt + "</a></li>"
+			fileBlock += "<li><a href='" + os.Getenv("DOMAIN") + "/report/" + file.ID + "/" + recipient.ID + "'>report" + fExt + "</a></li>"
 		}
 		fileBlock += "</ul>"
 
@@ -210,6 +210,37 @@ func GetJobs(cnt *gin.Context) {
 
 }
 
+func GetReportByRecipient(cnt *gin.Context) {
+
+	reportId := cnt.Param("report_id")
+	recipientId := cnt.Param("recipient_id")
+
+	var report DBReport
+	err := db.Where("id = ?", reportId).Find(&report).Error
+	if err != nil {
+		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+
+	var recipient DBRecipient
+	err = db.Where("id = ?", recipientId).Find(&recipient).Error
+	if err != nil {
+		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+
+	http.ServeFile(cnt.Writer, cnt.Request, "results/"+report.FileName)
+
+	var reportDownloadHistory DBReportDownloadHistory
+	reportDownloadHistory = DBReportDownloadHistory{
+		DBReportID:    reportId,
+		DBRecipientID: recipientId,
+	}
+	db.Create(&reportDownloadHistory)
+
+	report.OpenCount += 1
+	db.Save(report)
+}
 func GetReport(cnt *gin.Context) {
 
 	reportId := cnt.Param("report_id")
