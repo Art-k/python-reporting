@@ -111,10 +111,10 @@ func SendEmailOAUTH2(to string, subj string, body string) (status string, messag
 	msgString := emailTo +
 		subject +
 		mime +
-		"\n<html><div style='text-align: center;'><img src='" + os.Getenv("DOMAIN") + "/logo/" + dbOutMessage.ID + "' alt=''></div><p>" +
+		"\n<html><div style='text-align: center;'><img style='width:128px;height:128px;' src='" + os.Getenv("DOMAIN") + "/logo/" + dbOutMessage.ID + "' alt=''></div><p>" +
 		"<table><tr><td>" +
 		body +
-		"</td></tr><tr><td style='text-align: center;'>powered by <a href='https://www.maxcondoclub.com'>www.maxcondoclub.com</a></td></tr></table>"
+		"</td></tr><tr><td style='text-align: center;font-size: x-small;'>powered by <a href='https://www.maxcondoclub.com'>www.maxcondoclub.com</a></td></tr></table>"
 	dbOutMessage.OutMessage = msgString
 
 	msg := []byte(msgString)
