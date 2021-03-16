@@ -270,20 +270,23 @@ func GetReportByRecipient(cnt *gin.Context) {
 
 	var reportDownloadHistory DBReportDownloadHistory
 	reportDownloadHistory = DBReportDownloadHistory{
-		DBReportID:    reportId,
-		DBRecipientID: recipientId,
+		DBReportID:    report.ID,
+		DBRecipientID: recipient.ID,
 	}
 	db.Create(&reportDownloadHistory)
 
 	report.OpenCount += 1
-	db.Save(report)
+	err = db.Save(&report).Error
+	if err != nil {
+		Log.Error(err)
+	}
 }
 
 func GetReportInfo(cnt *gin.Context) {
 
 	reportId := cnt.Param("report_id")
 	var report DBReport
-	err := db.Where("id = ?", reportId).Find(&report).Error
+	err := db.Preload(clause.Associations).Where("id = ?", reportId).Find(&report).Error
 	if err != nil {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
 		return

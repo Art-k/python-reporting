@@ -33,7 +33,7 @@ func ApiProcessing() {
 	//r.LoadHTMLGlob("results/*.html")
 	r.GET("/report/:report_id", GetReport)                          //return file, open counter increased
 	r.GET("/report-info/:report_id", GetReportInfo)                 //return json
-	r.GET("/report/:report_id/*recipient_id", GetReportByRecipient) // return file, open counter increased, download statistic is saved for recipient <> report
+	r.GET("/report/:report_id/:recipient_id", GetReportByRecipient) // return file, open counter increased, download statistic is saved for recipient <> report
 
 	r.GET("/jobs", GetJobs)
 	r.GET("/schedule", GetSchedule)
