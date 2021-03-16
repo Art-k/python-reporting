@@ -72,6 +72,38 @@ func PostTaskSchedule(cnt *gin.Context) {
 
 }
 
+func PatchTask(cnt *gin.Context) {
+
+	taskId := cnt.Param("task_id")
+
+	var task DBTask
+	err := db.Where("id =?", taskId).Find(&task).Error
+	if err != nil {
+		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+
+	jsonData, err := ioutil.ReadAll(cnt.Request.Body)
+	if err != nil {
+		Log.Error(err)
+		return
+	}
+
+	var patchedTask POSTTask
+	err = json.Unmarshal(jsonData, &patchedTask)
+	if err != nil {
+		cnt.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	task.POSTTask = patchedTask
+
+	db.Save(&task)
+
+	cnt.JSON(http.StatusAccepted, task)
+
+}
+
 func PostTaskRecipients(cnt *gin.Context) {
 
 	taskId := cnt.Param("task_id")

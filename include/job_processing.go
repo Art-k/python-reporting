@@ -154,7 +154,12 @@ func FinishingTask(cnt *gin.Context) {
 		msg := strings.Replace(task.Message, "[[RECIPIENT_NAME]]", recipient.Name, 1)
 		msg = strings.Replace(msg, "[[REPORTS]]", fileBlock, 1)
 
-		SendEmailOAUTH2(recipient.Email, task.Subject, msg)
+		_, msgId, _ := SendEmailOAUTH2(recipient.Email, task.Subject, msg)
+
+		var outMsg DBOutgoingMails
+		db.Where("id = ?", msgId).Find(&outMsg)
+		outMsg.DBJobID = job.ID
+		db.Save(&outMsg)
 	}
 
 }

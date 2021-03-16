@@ -20,6 +20,7 @@ func ApiProcessing() {
 	r.POST("/script/:script_hash/task", SetTask)
 
 	r.GET("/tasks", GetTask)
+	r.PATCH("/task/:task_id", PatchTask)
 	r.POST("/task/:task_id/parameters", PostTaskParameter)
 	r.POST("/task/:task_id/recipients", PostTaskRecipients)
 	r.POST("/task/:task_id/schedule", PostTaskSchedule)

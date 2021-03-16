@@ -17,15 +17,6 @@ import (
 
 var GmailService *gmail.Service
 
-type DBOutgoingMails struct {
-	Model
-	ToEmail    string
-	Subject    string
-	Message    string
-	OutMessage string
-	Status     string
-}
-
 type GmailCredentialsType struct {
 	AccessToken  string
 	RefreshToken string
@@ -88,11 +79,6 @@ func OAuthGmailService() {
 
 func SendEmailOAUTH2(to string, subj string, body string) (status string, messageHash string, errMsg string) {
 
-	//emailBody, err := parseTemplate(template, data)
-	//if err != nil {
-	//	return false, errors.New("unable to parse email template")
-	//}
-
 	var dbOutMessage DBOutgoingMails
 
 	var message gmail.Message
@@ -149,11 +135,11 @@ func SendEmailOAUTH2(to string, subj string, body string) (status string, messag
 			dbOutMessage.Status = status
 			db.Save(&dbOutMessage)
 
-			//var msgHistory DBOutgoingMailHistory
-			//msgHistory.DBOutgoingMailsID = dbOutMessage.ID
-			//msgHistory.RecType = "error"
-			//msgHistory.HistoryMessage = err.Error()
-			//Db.Create(&msgHistory)
+			var msgHistory DBOutgoingMailHistory
+			msgHistory.DBOutgoingMailsID = dbOutMessage.ID
+			msgHistory.RecType = "error"
+			msgHistory.HistoryMessage = err.Error()
+			db.Create(&msgHistory)
 
 			return status, dbOutMessage.ID, err.Error()
 		}

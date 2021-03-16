@@ -46,6 +46,9 @@ type POSTTask struct {
 	TaskDescription string
 	Subject         string
 	Message         string
+	Enabled         bool
+	Action          string
+	Sender          string
 }
 
 type POSTRecipient struct {
@@ -71,10 +74,10 @@ type DBTask struct {
 	DBBaseScriptID string
 	POSTTask
 	POSTSchedule
-	Enabled        bool
-	Action         string
-	Sender         string
+
 	TaskParameters []DBTaskParameter
+	Jobs           []DBJob
+	Recipients     []DBRecipient
 }
 
 type POSTScriptParameter struct {
@@ -135,9 +138,20 @@ type DBReportDownloadHistory struct {
 
 type DBReport struct {
 	Model
-	DBJobID   string
-	FileName  string
-	OpenCount int
+	DBJobID         string
+	FileName        string
+	OpenCount       int
+	DownloadHistory []DBReportDownloadHistory
+}
+
+type DBOutgoingMails struct {
+	Model
+	DBJobID    string
+	ToEmail    string
+	Subject    string
+	Message    string
+	OutMessage string
+	Status     string
 }
 
 type DBOutgoingMailHistory struct {
