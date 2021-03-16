@@ -23,6 +23,7 @@ func ApiProcessing() {
 	r.PATCH("/task/:task_id", PatchTask)
 	r.POST("/task/:task_id/parameters", PostTaskParameter)
 	r.POST("/task/:task_id/recipients", PostTaskRecipients)
+	r.GET("/task/:task_id/recipients", GETTaskRecipients)
 	r.POST("/task/:task_id/schedule", PostTaskSchedule)
 
 	r.POST("/task/:task_id/run", RunTask)
@@ -39,6 +40,7 @@ func ApiProcessing() {
 	r.GET("/schedule", GetSchedule)
 
 	//TODO add auto update for a server
+	//TODO add error page, not found, bad gateway, etc
 
 	r.Run(":" + os.Getenv("PORT"))
 }

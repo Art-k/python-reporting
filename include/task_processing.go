@@ -112,6 +112,31 @@ func PatchTask(cnt *gin.Context) {
 
 }
 
+func GETTaskRecipients(cnt *gin.Context) {
+
+	taskId := cnt.Param("task_id")
+
+	var task DBTask
+	err := db.Where("id =?", taskId).Find(&task).Error
+	if err != nil {
+		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+	if task.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
+		return
+	}
+
+	var recipients []DBRecipient
+	err = db.Where("db_task_id = ?", task.ID).Find(&recipients).Error
+	if err != nil {
+		cnt.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+	cnt.JSON(http.StatusOK, recipients)
+
+}
+
 func PostTaskRecipients(cnt *gin.Context) {
 
 	taskId := cnt.Param("task_id")
