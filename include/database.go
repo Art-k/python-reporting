@@ -40,6 +40,7 @@ func initDatabase() {
 		&DBReport{},
 		&DBRecipient{},
 		&DBOutgoingMails{},
+		&DBOutgoingMailHistory{},
 	)
 
 	if dbErr != nil {
