@@ -23,6 +23,10 @@ func EnableTask(cnt *gin.Context) {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
 		return
 	}
+	if task.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
+		return
+	}
 
 	task.Enabled = true
 	db.Save(&task)
@@ -45,6 +49,10 @@ func RunTask(cnt *gin.Context) {
 	err := db.Preload(clause.Associations).Where("id =?", taskId).Find(&task).Error
 	if err != nil {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+	if task.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
 		return
 	}
 
@@ -115,6 +123,10 @@ func FinishingTask(cnt *gin.Context) {
 	err := db.Where("id = ?", jobId).Find(&job).Error
 	if err != nil {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+	if job.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
 		return
 	}
 
@@ -238,11 +250,19 @@ func GetReportByRecipient(cnt *gin.Context) {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
 		return
 	}
+	if report.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
+		return
+	}
 
 	var recipient DBRecipient
 	err = db.Where("id = ?", recipientId).Find(&recipient).Error
 	if err != nil {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+	if recipient.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
 		return
 	}
 
@@ -282,6 +302,10 @@ func GetReport(cnt *gin.Context) {
 	err := db.Where("id = ?", reportId).Find(&report).Error
 	if err != nil {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+	if report.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
 		return
 	}
 

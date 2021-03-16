@@ -39,6 +39,10 @@ func SetScriptParameters(cnt *gin.Context) {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err, "value": parametersFor})
 		return
 	}
+	if baseScript.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
+		return
+	}
 
 	var parameters []POSTScriptParameter
 	jsonData, err := ioutil.ReadAll(cnt.Request.Body)
@@ -78,6 +82,10 @@ func UploadScriptFiles(cnt *gin.Context) {
 	err := db.Where("id = ?", filesFor).Last(&baseScript).Error
 	if err != nil {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err, "value": filesFor})
+		return
+	}
+	if baseScript.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
 		return
 	}
 

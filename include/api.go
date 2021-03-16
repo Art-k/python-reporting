@@ -38,5 +38,7 @@ func ApiProcessing() {
 	r.GET("/jobs", GetJobs)
 	r.GET("/schedule", GetSchedule)
 
+	//TODO add auto update for a server
+
 	r.Run(":" + os.Getenv("PORT"))
 }

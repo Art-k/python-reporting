@@ -39,6 +39,10 @@ func PostTaskSchedule(cnt *gin.Context) {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
 		return
 	}
+	if task.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
+		return
+	}
 
 	jsonData, err := ioutil.ReadAll(cnt.Request.Body)
 	if err != nil {
@@ -82,6 +86,10 @@ func PatchTask(cnt *gin.Context) {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
 		return
 	}
+	if task.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
+		return
+	}
 
 	jsonData, err := ioutil.ReadAll(cnt.Request.Body)
 	if err != nil {
@@ -112,6 +120,10 @@ func PostTaskRecipients(cnt *gin.Context) {
 	err := db.Where("id =?", taskId).Find(&task).Error
 	if err != nil {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+	if task.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
 		return
 	}
 
@@ -156,6 +168,10 @@ func PostTaskParameter(cnt *gin.Context) {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
 		return
 	}
+	if task.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
+		return
+	}
 
 	jsonData, err := ioutil.ReadAll(cnt.Request.Body)
 	if err != nil {
@@ -196,6 +212,10 @@ func SetTask(cnt *gin.Context) {
 	err := db.Where("id =?", baseScriptHash).Find(&baseScript).Error
 	if err != nil {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+	if baseScript.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
 		return
 	}
 
