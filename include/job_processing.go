@@ -123,10 +123,12 @@ func FinishingTask(cnt *gin.Context) {
 	err := db.Where("id = ?", jobId).Find(&job).Error
 	if err != nil {
 		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
+		Log.Error("Job is not found", err)
 		return
 	}
 	if job.ID == "" {
 		cnt.JSON(http.StatusNotFound, nil)
+		Log.Error("Job is not found", err)
 		return
 	}
 
@@ -137,7 +139,7 @@ func FinishingTask(cnt *gin.Context) {
 	var postJobDone POSTJobDone
 	err = json.Unmarshal(jsonData, &postJobDone)
 	if err != nil {
-		cnt.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		cnt.JSON(http.StatusInternalServerError, gin.H{"message": "could be unmarshal", "error": err, "received": string(jsonData)})
 		return
 	}
 
