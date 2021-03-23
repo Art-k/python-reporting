@@ -5,11 +5,8 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"os"
+	"python-reporter/pkg/include"
 	"time"
-)
-
-import (
-	inc "./pkg/include"
 )
 
 func main() {
@@ -25,12 +22,12 @@ func main() {
 		log.Fatal("ERROR loading .env file")
 	}
 
-	inc.InitApplication(f)
-	inc.Sch = gocron.NewScheduler(time.UTC)
-	go inc.ApplicationStartAllTasks()
+	include.InitApplication(f)
+	include.Sch = gocron.NewScheduler(time.UTC)
+	go include.ApplicationStartAllTasks()
 
-	inc.OpenGmailCredentials(os.Getenv("SENDER_EMAIL"))
-	inc.OAuthGmailService()
+	include.OpenGmailCredentials(os.Getenv("SENDER_EMAIL"))
+	include.OAuthGmailService()
 
-	inc.ApiProcessing()
+	include.ApiProcessing()
 }
