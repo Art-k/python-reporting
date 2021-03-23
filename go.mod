@@ -1,4 +1,4 @@
-module python-reporter
+module python-reporting
 
 go 1.15
 

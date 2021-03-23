@@ -5,7 +5,7 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	"python-reporter/pkg/include"
+	include "python-reporting/pkg/include"
 	"time"
 )
 
