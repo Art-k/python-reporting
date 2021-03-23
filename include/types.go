@@ -111,8 +111,13 @@ type DBScriptFile struct {
 	PathToFile     string
 }
 
+type POSTJobDoneFile struct {
+	FileName   string
+	ReportName string
+}
+
 type POSTJobDone struct {
-	Files      []string
+	Files      []POSTJobDoneFile
 	DurationMs int
 }
 
@@ -138,8 +143,8 @@ type DBReportDownloadHistory struct {
 
 type DBReport struct {
 	Model
-	DBJobID         string
-	FileName        string
+	DBJobID string
+	POSTJobDoneFile
 	OpenCount       int
 	DownloadHistory []DBReportDownloadHistory
 }

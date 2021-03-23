@@ -147,8 +147,8 @@ func FinishingTask(cnt *gin.Context) {
 	var dbFiles []DBReport
 	for _, file := range postJobDone.Files {
 		dbFiles = append(dbFiles, DBReport{
-			DBJobID:  job.ID,
-			FileName: file,
+			DBJobID:         job.ID,
+			POSTJobDoneFile: file,
 		})
 	}
 	db.Create(&dbFiles)
@@ -165,7 +165,7 @@ func FinishingTask(cnt *gin.Context) {
 		fileBlock := "<p>Here is a list of reports :<ul>"
 		for _, file := range dbFiles {
 			fExt := filepath.Ext(file.FileName)
-			fileBlock += "<li><a href='" + os.Getenv("DOMAIN") + "/report/" + file.ID + "/" + recipient.ID + "'>report" + fExt + "</a></li>"
+			fileBlock += "<li><a href='" + os.Getenv("DOMAIN") + "/report/" + file.ID + "/" + recipient.ID + "'>" + file.ReportName + fExt + "</a></li>"
 		}
 		fileBlock += "</ul>"
 

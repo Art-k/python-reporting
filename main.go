@@ -12,8 +12,6 @@ import (
 	inc "./include"
 )
 
-// TODO Add logo to email. Add logo processing, we need to know if email opened.
-
 func main() {
 
 	f, err := os.OpenFile("log.txt", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)

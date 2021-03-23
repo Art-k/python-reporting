@@ -100,7 +100,7 @@ func SendEmailOAUTH2(to string, subj string, body string) (status string, messag
 		"<html>" +
 		"<table style='min-width:200px; max-width:700px; width:80%; text-align:justify; margin-left:auto; margin-right:auto;'>" +
 		"<tr><td style='background:azure; padding:10px'><div style='text-align: center;'><img style='width:60px;height:75px;' src='" + os.Getenv("DOMAIN") + "/logo/" + dbOutMessage.ID + "' alt=''></div></td></tr>" +
-		"<tr><td style='padding:15px;>" + body + "</td></tr>" +
+		"<tr><td style='padding:15px;'>" + body + "</td></tr>" +
 		"<tr style='background:azure;'><td style='padding:10px;text-align: center;font-size: x-small;'>powered by <a href='https://www.maxcondoclub.com'>www.maxcondoclub.com</a></td></tr></table>"
 	dbOutMessage.OutMessage = msgString
 
