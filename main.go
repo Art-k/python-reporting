@@ -9,7 +9,7 @@ import (
 )
 
 import (
-	inc "./include"
+	inc "./pkg/include"
 )
 
 func main() {
