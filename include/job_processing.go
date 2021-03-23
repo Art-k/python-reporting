@@ -139,6 +139,7 @@ func FinishingTask(cnt *gin.Context) {
 	var postJobDone POSTJobDone
 	err = json.Unmarshal(jsonData, &postJobDone)
 	if err != nil {
+		Log.Error("Unmarshall error ", err)
 		cnt.JSON(http.StatusInternalServerError, gin.H{"message": "could be unmarshal", "error": err, "received": string(jsonData)})
 		return
 	}
