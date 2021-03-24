@@ -12,6 +12,12 @@ var (
 	dbErr error
 )
 
+type getResponse struct {
+	Total    int64
+	Current  int
+	Entities interface{}
+}
+
 type Model struct {
 	ID        string `gorm:"primary_key"`
 	CreatedAt time.Time

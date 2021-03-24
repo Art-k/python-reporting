@@ -228,16 +228,20 @@ func GetJobs(cnt *gin.Context) {
 
 	DB := db
 
+	var resp getResponse
+	DB.Model(&DBJob{}).Count(&resp.Total)
 	DB.Preload(clause.Associations).
 		Order("created_at desc").
-		Find(&jobs).
 		Limit(perPage).
-		Offset(page - 1*perPage)
+		Offset(page - 1*perPage).
+		Find(&jobs)
+	resp.Entities = jobs
+	resp.Current = len(jobs)
 
 	switch format {
 
 	default:
-		cnt.JSON(http.StatusOK, jobs)
+		cnt.JSON(http.StatusOK, resp)
 	}
 
 }

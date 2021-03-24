@@ -150,16 +150,20 @@ func GetBaseScripts(cnt *gin.Context) {
 
 	DB := db
 
+	var resp getResponse
+	DB.Model(&DBBaseScript{}).Count(&resp.Total)
 	DB.Preload(clause.Associations).
 		Order("created_at desc").
-		Find(&baseScripts).
 		Limit(perPage).
-		Offset(page - 1*perPage)
+		Offset(page - 1*perPage).
+		Find(&baseScripts)
+	resp.Entities = baseScripts
+	resp.Current = len(baseScripts)
 
 	switch format {
 
 	default:
-		cnt.JSON(http.StatusOK, baseScripts)
+		cnt.JSON(http.StatusOK, resp)
 	}
 
 }

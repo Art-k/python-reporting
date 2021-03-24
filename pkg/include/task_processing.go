@@ -15,16 +15,20 @@ func GetTask(cnt *gin.Context) {
 
 	format := cnt.Query("format")
 
+	var resp getResponse
+	db.Model(&DBTask{}).Count(&resp.Total)
 	db.Preload(clause.Associations).
 		Order("created_at desc").
-		Find(&tasks).
 		Limit(perPage).
-		Offset(page - 1*perPage)
+		Offset(page - 1*perPage).
+		Find(&tasks)
+	resp.Entities = tasks
+	resp.Current = len(tasks)
 
 	switch format {
 
 	default:
-		cnt.JSON(http.StatusOK, tasks)
+		cnt.JSON(http.StatusOK, resp)
 	}
 
 }
