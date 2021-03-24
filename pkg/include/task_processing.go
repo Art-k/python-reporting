@@ -187,6 +187,8 @@ func GetTaskParameter(cnt *gin.Context) {
 
 	taskId := cnt.Param("task_id")
 
+	output := cnt.Query("output")
+
 	var task DBTask
 	err := db.Where("id =?", taskId).Find(&task).Error
 	if err != nil {
@@ -205,7 +207,16 @@ func GetTaskParameter(cnt *gin.Context) {
 		return
 	}
 
-	cnt.JSON(http.StatusOK, parameters)
+	switch output {
+	case "short":
+		var shortForm []POSTTaskParameter
+		for _, param := range parameters {
+			shortForm = append(shortForm, param.POSTTaskParameter)
+		}
+		cnt.JSON(http.StatusOK, shortForm)
+	default:
+		cnt.JSON(http.StatusOK, parameters)
+	}
 
 }
 
