@@ -31,6 +31,7 @@ func ApiProcessing() {
 		auth.GET("/tasks", GetTask)
 		auth.PATCH("/task/:task_id", PatchTask)
 		auth.POST("/task/:task_id/parameters", PostTaskParameter)
+		auth.GET("/task/:task_id/parameters", GetTaskParameter)
 		auth.POST("/task/:task_id/recipients", PostTaskRecipients)
 		auth.GET("/task/:task_id/recipients", GETTaskRecipients)
 		auth.POST("/task/:task_id/schedule", PostTaskSchedule)

@@ -183,6 +183,32 @@ func PostTaskRecipients(cnt *gin.Context) {
 
 }
 
+func GetTaskParameter(cnt *gin.Context) {
+
+	taskId := cnt.Param("task_id")
+
+	var task DBTask
+	err := db.Where("id =?", taskId).Find(&task).Error
+	if err != nil {
+		cnt.JSON(http.StatusNotFound, gin.H{"error": err})
+		return
+	}
+	if task.ID == "" {
+		cnt.JSON(http.StatusNotFound, nil)
+		return
+	}
+
+	var parameters []DBTaskParameter
+	err = db.Where("db_task_id = ?", taskId).Find(&parameters).Error
+	if err != nil {
+		cnt.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+
+	cnt.JSON(http.StatusOK, parameters)
+
+}
+
 func PostTaskParameter(cnt *gin.Context) {
 
 	taskId := cnt.Param("task_id")
