@@ -138,6 +138,7 @@ type DBJob struct {
 	CommandOutput  string
 	Error          string
 	Reports        []DBReport
+	Mails          []DBOutgoingMails
 	DurationMs     int
 	TestRun        bool
 }
@@ -164,6 +165,7 @@ type DBOutgoingMails struct {
 	Message    string
 	OutMessage string
 	Status     string
+	History    []DBOutgoingMailHistory
 }
 
 type DBOutgoingMailHistory struct {
