@@ -165,15 +165,31 @@ func FinishingTask(cnt *gin.Context) {
 
 	for _, recipient := range recipients {
 
-		fileBlock := "<p>Here is a list of reports :<ul>"
-		for _, file := range dbFiles {
-			fExt := filepath.Ext(file.FileName)
-			fileBlock += "<li><a href='" + os.Getenv("DOMAIN") + "/report/" + file.ID + "/" + recipient.ID + "'>" + file.ReportName + fExt + "</a></li>"
-		}
-		fileBlock += "</ul>"
+		msg := ""
+		switch postJobDone.ResultType {
 
-		msg := strings.Replace(task.Message, "[[RECIPIENT_NAME]]", recipient.Name, 1)
-		msg = strings.Replace(msg, "[[REPORTS]]", fileBlock, 1)
+		case "email_body_as_a_result":
+
+			for _, file := range dbFiles {
+				buf, err := ioutil.ReadFile("results/" + file.FileName)
+				if err != nil {
+					Log.Error(err)
+				}
+				msg = strings.Replace(string(buf), "[[RECIPIENT_NAME]]", recipient.Name, 1)
+			}
+
+		default:
+
+			fileBlock := "<p>Here is a list of reports :<ul>"
+			for _, file := range dbFiles {
+				fExt := filepath.Ext(file.FileName)
+				fileBlock += "<li><a href='" + os.Getenv("DOMAIN") + "/report/" + file.ID + "/" + recipient.ID + "'>" + file.ReportName + fExt + "</a></li>"
+			}
+			fileBlock += "</ul>"
+
+			msg = strings.Replace(task.Message, "[[RECIPIENT_NAME]]", recipient.Name, 1)
+			msg = strings.Replace(msg, "[[REPORTS]]", fileBlock, 1)
+		}
 
 		var msgId string
 
@@ -188,7 +204,6 @@ func FinishingTask(cnt *gin.Context) {
 		outMsg.DBJobID = job.ID
 		db.Save(&outMsg)
 	}
-
 }
 
 func GetSchedule(cnt *gin.Context) {
