@@ -13,6 +13,7 @@ func ApiProcessing() {
 	//r.LoadHTMLGlob("results/*.html")
 	r.GET("/report/:report_id/:recipient_id", GetReportByRecipient) // return file, open counter increased, download statistic is saved for recipient <> report
 	r.POST("/job_done/:job_id", FinishingTask)
+	//r.POST("/job_done_email/:job_id", FinishingTask)
 	r.GET("/logo/:id", GETLogoProcessing)
 
 	auth := r.Group("/")

@@ -53,8 +53,8 @@ type POSTTask struct {
 	Subject         string
 	Message         string
 	Enabled         bool
-	Action          string
-	Sender          string
+	//Action          string
+	Sender string
 }
 
 type POSTRecipient struct {
@@ -125,6 +125,7 @@ type POSTJobDoneFile struct {
 type POSTJobDone struct {
 	Files      []POSTJobDoneFile
 	DurationMs int
+	ResultType string
 }
 
 type DBJob struct {
