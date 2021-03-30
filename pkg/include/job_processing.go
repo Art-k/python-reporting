@@ -64,13 +64,19 @@ func RunTask(cnt *gin.Context) {
 
 func StartJob(task *DBTask, source string, testRun bool) DBJob {
 
-	Log.Trace("Start Job '", source, "'")
+	Log.Tracef("Start Job, source is '%s', is it test run %t, task id : %s", source, testRun, task.ID)
 
 	var scriptFile DBScriptFile
 	db.Where("db_base_script_id = ?", task.DBBaseScriptID).Where("script_file = ?", true).Find(&scriptFile)
+	if scriptFile.ID == "" {
+		Log.Errorf("Script file id '%s' not found", task.DBBaseScriptID)
+	}
 
 	var parameters []DBTaskParameter
 	db.Where("db_task_id = ?", task.ID).Find(&parameters)
+	if len(parameters) == 0 {
+		Log.Errorf("Parameters for task id '%s' not found", task.ID)
+	}
 
 	var job DBJob
 	job = DBJob{
@@ -83,7 +89,10 @@ func StartJob(task *DBTask, source string, testRun bool) DBJob {
 		Error:          "",
 		TestRun:        testRun,
 	}
-	db.Create(&job)
+	err := db.Create(&job).Error
+	if err != nil {
+		Log.Errorf("Job save in DB with error '%s' ", err.Error())
+	}
 
 	// "/home/art-k/PROJECT/MY/python-reporting" +
 	//args := strings.Replace(scriptFile.PathToFile, "./", "", 1) +
@@ -101,6 +110,7 @@ func StartJob(task *DBTask, source string, testRun bool) DBJob {
 	}
 
 	job.CommandString = strings.Join(cmd.Args[:], " ")
+	Log.Tracef("Command line arguments created, '%s' ", job.CommandString)
 
 	db.Save(&job)
 
