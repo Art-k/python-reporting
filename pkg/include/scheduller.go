@@ -36,7 +36,7 @@ func RunScheduler(task *DBTask) {
 	case "day":
 		jb, err = Sch.Every(task.RepeatEvery).Day().StartAt(*task.FirstRun).Do(StartJob, task, "timer", false)
 	case "month":
-		jb, err = Sch.Every(task.RepeatEvery).Month(task.FirstRun.Day()).StartAt(*task.FirstRun).Do(StartJob, task, "timer")
+		jb, err = Sch.Every(task.RepeatEvery).Month(task.FirstRun.Day()).StartAt(*task.FirstRun).Do(StartJob, task, "timer", false)
 	}
 
 	if err != nil {
