@@ -28,13 +28,13 @@ func RunScheduler(task *DBTask) {
 
 	switch task.RepeatInterval {
 	case "hour":
-		jb, err = Sch.Every(task.RepeatEvery).Hour().StartAt(*task.FirstRun).Do(StartJob, task, "timer")
+		jb, err = Sch.Every(task.RepeatEvery).Hour().StartAt(*task.FirstRun).Do(StartJob, task, "timer", false)
 	case "minutes":
-		jb, err = Sch.Every(task.RepeatEvery).Minute().StartAt(*task.FirstRun).Do(StartJob, task, "timer")
+		jb, err = Sch.Every(task.RepeatEvery).Minute().StartAt(*task.FirstRun).Do(StartJob, task, "timer", false)
 	case "minute":
-		jb, err = Sch.Every(task.RepeatEvery).Minute().StartAt(*task.FirstRun).Do(StartJob, task, "timer")
+		jb, err = Sch.Every(task.RepeatEvery).Minute().StartAt(*task.FirstRun).Do(StartJob, task, "timer", false)
 	case "day":
-		jb, err = Sch.Every(task.RepeatEvery).Day().StartAt(*task.FirstRun).Do(StartJob, task, "timer")
+		jb, err = Sch.Every(task.RepeatEvery).Day().StartAt(*task.FirstRun).Do(StartJob, task, "timer", false)
 	case "month":
 		jb, err = Sch.Every(task.RepeatEvery).Month(task.FirstRun.Day()).StartAt(*task.FirstRun).Do(StartJob, task, "timer")
 	}
