@@ -18,7 +18,7 @@ func ApplicationStartAllTasks() {
 	}
 
 	Sch.StartAsync()
-
+	Log.Info("Scheduler is running : ", Sch.IsRunning(), "\n")
 }
 
 func RunScheduler(task *DBTask) {
@@ -28,22 +28,23 @@ func RunScheduler(task *DBTask) {
 
 	switch task.RepeatInterval {
 	case "hour":
-		jb, err = Sch.Every(task.RepeatEvery).Hour().StartAt(*task.FirstRun).Do(StartJob, task, "timer", false)
+		jb, err = Sch.Every(task.RepeatEvery).Hour().StartAt(*task.FirstRun).Do(StartJob, *task, "timer", false)
 	case "minutes":
-		jb, err = Sch.Every(task.RepeatEvery).Minute().StartAt(*task.FirstRun).Do(StartJob, task, "timer", false)
+		jb, err = Sch.Every(task.RepeatEvery).Minute().StartAt(*task.FirstRun).Do(StartJob, *task, "timer", false)
 	case "minute":
-		jb, err = Sch.Every(task.RepeatEvery).Minute().StartAt(*task.FirstRun).Do(StartJob, task, "timer", false)
+		jb, err = Sch.Every(task.RepeatEvery).Minute().StartAt(*task.FirstRun).Do(StartJob, *task, "timer", false)
 	case "day":
-		jb, err = Sch.Every(task.RepeatEvery).Day().StartAt(*task.FirstRun).Do(StartJob, task, "timer", false)
+		jb, err = Sch.Every(task.RepeatEvery).Day().StartAt(*task.FirstRun).Do(StartJob, *task, "timer", false)
 	case "month":
-		jb, err = Sch.Every(task.RepeatEvery).Month(task.FirstRun.Day()).StartAt(*task.FirstRun).Do(StartJob, task, "timer", false)
+		day := task.FirstRun.Day()
+		jb, err = Sch.Every(task.RepeatEvery).Months(day).Do(StartJob, *task, "timer", false)
 	}
 
 	if err != nil {
 		Log.Error(err.Error())
 	} else {
 		jb.Tag(task.ID)
-		Log.Tracef("Task is run")
+		Log.Info("Task, first run ", task.FirstRun, " next run ", jb.NextRun(), "task id : ", task.ID)
 	}
 
 }
