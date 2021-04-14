@@ -56,15 +56,22 @@ func RunTask(cnt *gin.Context) {
 		return
 	}
 
-	job := StartJob(&task, "api", testRun)
+	job := StartJob(task, "api", testRun)
 
 	cnt.JSON(http.StatusCreated, job)
 
 }
 
-func StartJob(task *DBTask, source string, testRun bool) DBJob {
+func StartJob(task DBTask, source string, testRun bool) DBJob {
 
 	Log.Tracef("Start Job, source is '%s', is it test run %t, task id : %s", source, testRun, task.ID)
+	Log.Tracef("Job title : '%s'", task.TaskName)
+
+	var job DBJob
+
+	if os.Getenv("DO_JOB") == "0" {
+		return job
+	}
 
 	var scriptFile DBScriptFile
 	db.Where("db_base_script_id = ?", task.DBBaseScriptID).Where("script_file = ?", true).Find(&scriptFile)
@@ -78,7 +85,6 @@ func StartJob(task *DBTask, source string, testRun bool) DBJob {
 		Log.Errorf("Parameters for task id '%s' not found", task.ID)
 	}
 
-	var job DBJob
 	job = DBJob{
 		DBBaseScriptID: task.DBBaseScriptID,
 		DBTaskID:       task.ID,
