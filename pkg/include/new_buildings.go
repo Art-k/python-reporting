@@ -206,6 +206,8 @@ func SyncBuildings() {
 		Log.Infof("Messages sent!")
 	}
 
+	Log.Infof("Compare DONE!")
+
 }
 
 type Token struct {
