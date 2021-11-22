@@ -149,7 +149,7 @@ func SyncBuildings() {
 		} else {
 
 			changed := false
-			tmpMessage := "<i>Building changed</i><br>"
+			tmpMessage := "<i>Building changed '" + exBuilding.Address + "'</i><br>"
 
 			if exBuilding.Name != rec.Name {
 				tmpMessage += "Building Name :<b>" + exBuilding.Name + "</b> -> <b>" + rec.Name + "</b><br>"
