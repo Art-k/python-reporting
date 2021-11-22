@@ -103,7 +103,7 @@ type InBuildingResponse struct {
 
 func SyncBuildings() {
 
-	Message := "<p>Hi</p><br>"
+	Message := "<p>Hi</p><br>Here is a list of MaxCondoClub changes: <br>"
 	isAdded := false
 	isChanged := false
 
@@ -175,6 +175,18 @@ func SyncBuildings() {
 				changed = true
 			}
 
+			if !exBuilding.Disabledauthorizationat && rec.Disabledauthorizationat != nil {
+				tmpMessage += "Authorisation is disabled"
+				exBuilding.Disabledauthorizationat = true
+				changed = true
+			}
+
+			if exBuilding.Disabledauthorizationat && rec.Disabledauthorizationat == nil {
+				tmpMessage += "Authorisation is enabled"
+				exBuilding.Disabledauthorizationat = false
+				changed = true
+			}
+
 			if changed {
 				Message += tmpMessage
 				isChanged = true
@@ -184,7 +196,9 @@ func SyncBuildings() {
 	}
 
 	if isAdded || isChanged {
-		SendEmailOAUTH2(os.Getenv("BUILDINGS_CHANGED"), "MaxCondoClub Building list changed ", Message)
+		SendEmailOAUTH2(os.Getenv("BUILDINGS_CHANGED1"), "MaxCondoClub Building list changed ", Message)
+		SendEmailOAUTH2(os.Getenv("BUILDINGS_CHANGED2"), "MaxCondoClub Building list changed ", Message)
+		SendEmailOAUTH2(os.Getenv("BUILDINGS_CHANGED3"), "MaxCondoClub Building list changed ", Message)
 	}
 
 }
