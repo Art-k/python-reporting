@@ -108,6 +108,7 @@ func SyncBuildings() {
 	isChanged := false
 
 	allBuildings := GetAllMCCBuildings()
+	Log.Info("Buildings received")
 	for _, rec := range allBuildings {
 
 		var exBuilding DBBuilding
@@ -145,6 +146,8 @@ func SyncBuildings() {
 			Message += "Corporation :<b>" + rec.Corporationnumber.Name + "</b><br><br>"
 
 			isAdded = true
+
+			Log.Infof("Building ADDED '%d'", newBld.ExternalID)
 
 		} else {
 
@@ -188,6 +191,7 @@ func SyncBuildings() {
 			}
 
 			if changed {
+				Log.Infof("Building changed '%d'", exBuilding.ExternalID)
 				Message += tmpMessage
 				isChanged = true
 			}
@@ -199,6 +203,7 @@ func SyncBuildings() {
 		SendEmailOAUTH2(os.Getenv("BUILDINGS_CHANGED1"), "MaxCondoClub Building list changed ", Message)
 		SendEmailOAUTH2(os.Getenv("BUILDINGS_CHANGED2"), "MaxCondoClub Building list changed ", Message)
 		SendEmailOAUTH2(os.Getenv("BUILDINGS_CHANGED3"), "MaxCondoClub Building list changed ", Message)
+		Log.Infof("Messages sent!")
 	}
 
 }
