@@ -1,7 +1,9 @@
 package include
 
 import (
+	"fmt"
 	"github.com/go-co-op/gocron"
+	"time"
 )
 
 var Sch *gocron.Scheduler
@@ -16,6 +18,10 @@ func ApplicationStartAllTasks() {
 		Log.Tracef("run task (%s) '%s' which is enabled '%t' ", task.ID, task.TaskName, task.Enabled)
 		RunScheduler(&task)
 	}
+
+	var jb *gocron.Job
+	jb, _ = Sch.Every(time.Hour * 24).Do(SyncBuildings)
+	fmt.Println(jb.NextRun())
 
 	Sch.StartAsync()
 	Log.Info("Scheduler is running : ", Sch.IsRunning(), "\n")

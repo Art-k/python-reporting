@@ -42,6 +42,8 @@ func initDatabase() {
 		&DBOutgoingMails{},
 		&DBOutgoingMailHistory{},
 		&DBReportDownloadHistory{},
+
+		&DBBuilding{},
 	)
 
 	if dbErr != nil {
