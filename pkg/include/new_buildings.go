@@ -140,7 +140,8 @@ func SyncBuildings() {
 
 			db.Create(&newBld)
 
-			Message += "<i>Building added</i><br>Building Name :<b>" + rec.Name + "</b><br>"
+			Message += "<br><br><i>Building added</i>"
+			Message += "<br>Building Name :<b>" + rec.Name + "</b><br>"
 			Message += "Building Address :<b>" + rec.Address + "</b><br>"
 			Message += "Company Name :<b>" + rec.Companyname + "</b><br>"
 			Message += "Corporation :<b>" + rec.Corporationnumber.Name + "</b><br><br>"
@@ -152,7 +153,7 @@ func SyncBuildings() {
 		} else {
 
 			changed := false
-			tmpMessage := "<i>Building changed '" + exBuilding.Address + "'</i><br>"
+			tmpMessage := "<br><br><i>Building changed '" + exBuilding.Address + "'</i><br>"
 
 			if exBuilding.Name != rec.Name {
 				tmpMessage += "Building Name :<b>" + exBuilding.Name + "</b> -> <b>" + rec.Name + "</b><br>"
@@ -179,16 +180,18 @@ func SyncBuildings() {
 			}
 
 			if !exBuilding.Disabledauthorizationat && rec.Disabledauthorizationat != nil {
-				tmpMessage += "Authorisation is disabled"
+				tmpMessage += "Authorisation is <b>disabled</b>"
 				exBuilding.Disabledauthorizationat = true
 				changed = true
 			}
 
 			if exBuilding.Disabledauthorizationat && rec.Disabledauthorizationat == nil {
-				tmpMessage += "Authorisation is enabled"
+				tmpMessage += "Authorisation is <b>enabled</b>"
 				exBuilding.Disabledauthorizationat = false
 				changed = true
 			}
+
+			db.Save(&exBuilding)
 
 			if changed {
 				Log.Infof("Building changed '%d'", exBuilding.ExternalID)
