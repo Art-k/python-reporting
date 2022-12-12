@@ -123,6 +123,7 @@ func StartJob(task DBTask, source string, testRun bool) DBJob {
 	go func(j *DBJob) {
 		out, err := cmd.Output()
 		if err != nil {
+			Log.Errorf("Job '%s' failed with error '%s' ", j.ID, err.Error())
 			j.Error = err.Error()
 		}
 		j.CommandOutput = string(out)
